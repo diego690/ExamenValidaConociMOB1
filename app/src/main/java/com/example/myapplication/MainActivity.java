@@ -10,7 +10,9 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
+import com.example.myapplication.Adapter.CountryAdapter;
 import com.example.myapplication.Adapter.UsuarioAdapter;
+import com.example.myapplication.Model.Country;
 import com.example.myapplication.Model.Usuario;
 import com.example.myapplication.WebService.Asynchtask;
 import com.example.myapplication.WebService.WebService;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements Asynchtask {
 
 
         Map<String, String> datos = new HashMap<String, String>();
-        WebService ws= new WebService("https://reqres.in/api/users",
+        WebService ws= new WebService("http://www.geognos.com/api/en/countries/info/all.json",
                 datos, MainActivity.this, MainActivity.this);
         ws.execute("GET");
 
@@ -50,16 +52,16 @@ public class MainActivity extends AppCompatActivity implements Asynchtask {
 
     @Override
     public void processFinish(String result) throws JSONException {
-        ArrayList<Usuario> lstUsuarios = new ArrayList<Usuario> ();
+        ArrayList<Country> lstUsuarios = new ArrayList<Country> ();
 
         try {
 
             JSONObject JSONlista =  new JSONObject(result);
             JSONArray JSONlistaUsuarios=  JSONlista.getJSONArray("data");
 
-            lstUsuarios = Usuario.JsonObjectsBuild(JSONlistaUsuarios);
+            lstUsuarios = Country.JsonObjectsBuild(JSONlistaUsuarios);
 
-            UsuarioAdapter adapatorUsuario = new UsuarioAdapter(this, lstUsuarios);
+            CountryAdapter adapatorUsuario = new CountryAdapter(this, lstUsuarios);
 
             int resId = R.anim.layout_animation_down_to_up;
             LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getApplicationContext(),

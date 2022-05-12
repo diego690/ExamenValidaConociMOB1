@@ -59,6 +59,9 @@ public class Country {
 
         flag =  a.getInt("flag");
 
+        iso2 = a.getString("iso2");
+        iso3= a.getString("iso3");
+
 
 
 
