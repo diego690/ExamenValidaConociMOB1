@@ -27,4 +27,23 @@ public class CountryCodes {
     public Integer getIsonN() {
         return isonN;
     }
+
+    public CountryCodes(String tld, String iso2, String iso3, String fips, Integer isonN) {
+        this.tld = tld;
+        this.iso2 = iso2;
+        this.iso3 = iso3;
+        this.fips = fips;
+        this.isonN = isonN;
+    }
+
+    @Override
+    public String toString() {
+        return "CountryCodes{" +
+                "tld='" + tld + '\'' +
+                ", iso2='" + iso2 + '\'' +
+                ", iso3='" + iso3 + '\'' +
+                ", fips='" + fips + '\'' +
+                ", isonN=" + isonN +
+                '}';
+    }
 }

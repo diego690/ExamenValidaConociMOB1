@@ -1,14 +1,11 @@
 package com.example.myapplication;
 
-import android.os.Bundle;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.myapplication.Adapter.CountryAdapter;
 import com.example.myapplication.Model.Country;
@@ -22,26 +19,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements Asynchtask {
+public class PrincipalActivity extends AppCompatActivity implements Asynchtask {
 
-    RecyclerView recyclerView;
-
+    ListView lstOpciones;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        lstOpciones = (ListView) findViewById(R.id.lstListaUsuario);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        View header = getLayoutInflater().inflate(R.layout.cabecera, null);
+        lstOpciones.addHeaderView(header);
 
-
-        Map<String, String> datos = new HashMap<String, String>();
+        Map<String, String> datos = new HashMap<>();
         WebService ws= new WebService("http://www.geognos.com/api/en/countries/info/all.json",
-                datos, MainActivity.this, MainActivity.this);
+                datos, PrincipalActivity.this, PrincipalActivity.this);
         ws.execute("GET");
+
 
 
     }
@@ -53,19 +48,13 @@ public class MainActivity extends AppCompatActivity implements Asynchtask {
         try {
 
             JSONObject JSONlista =  new JSONObject(result);
-            //JSONArray JSONlistaUsuarios=  JSONlista.getJSONArray("Results");
+
 
             lstUsuarios = Country.JsonObjectsBuild(JSONlista);
 
             CountryAdapter adapatorUsuario = new CountryAdapter(this, lstUsuarios);
 
-            int resId = R.anim.layout_animation_down_to_up;
-            LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getApplicationContext(),
-                    resId);
-            recyclerView.setLayoutAnimation(animation);
-
-
-
+            lstOpciones.setAdapter(adapatorUsuario);
 
         }catch (JSONException e)
         {

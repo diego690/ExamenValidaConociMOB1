@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.Model.Country;
 import com.example.myapplication.Model.Usuario;
 import com.example.myapplication.R;
@@ -18,49 +20,32 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryViewHolder> {
+public class CountryAdapter  extends ArrayAdapter<Country> {
 
-    private Context Ctx;
-    private ArrayList<Country> lstCountrys;
-
-    public CountryAdapter(Context ctx, ArrayList<Country> lstCountrys) {
-        Ctx = ctx;
-        this.lstCountrys = lstCountrys;
+    public CountryAdapter(Context context, ArrayList<Country> datos) {
+        super(context, R.layout.items, datos);
     }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View item = inflater.inflate(R.layout.items, null);
 
-    @NonNull
-    @Override
-    public CountryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //inflating and returning our view holder
-        LayoutInflater inflater = LayoutInflater.from(Ctx);
-        View view = inflater.inflate(R.layout.item_usuario, null);
-        return new CountryAdapter.CountryViewHolder(view);
-    }
+        TextView lblNombre = (TextView) item.findViewById(R.id.lblNombre);
+        TextView lblemail = (TextView) item.findViewById(R.id.lblEmail);
+        TextView lblweb = (TextView) item.findViewById(R.id.lblweb);
 
-    @Override
-    public void onBindViewHolder(@NonNull CountryAdapter.CountryViewHolder holder, int position) {
-        // setting data to our views of recycler view.
-        Country modal = lstCountrys.get(position);
-        holder.textViewName.setText(modal.getName());
-        holder.textViewURLAvatar.setText(modal.getFlag());
-        holder.textViewMail.setText(modal.getIso2());
-        Picasso.with(Ctx) .load(modal.getImg()).into(holder.imageView);
-    }
+        ImageView imageView = (ImageView) item.findViewById(R.id.imgUsr);
 
-    @Override
-    public int getItemCount() {
-        return lstCountrys.size();
-    }
+        Glide.with(this.getContext())
+                .load(getItem(position).getUrl_Pais())
+                .into(imageView);
 
-    public class CountryViewHolder extends RecyclerView.ViewHolder{
-        TextView textViewName, textViewURLAvatar, textViewMail;
-        ImageView imageView;
-        public CountryViewHolder(View view) {
-            super(view);
-            textViewName= itemView.findViewById(R.id.txtNamePais);
-            textViewURLAvatar = itemView.findViewById(R.id.txtAvatarPais);
-            textViewMail = itemView.findViewById(R.id.txtMailPais);
-            imageView = itemView.findViewById(R.id.imgAvatarPais);
-        }
+        //.error(R.drawable.imgnotfound)
+
+
+        lblNombre.setText(getItem(position).getNombrePais());
+        lblemail.setText(getItem(position).getIso2());
+        lblweb.setText(getItem(position).getUrl_Pais());
+
+        return (item);
     }
 }
